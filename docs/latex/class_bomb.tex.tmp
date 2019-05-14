@@ -1,0 +1,41 @@
+\hypertarget{class_bomb}{}\section{Bomb Class Reference}
+\label{class_bomb}\index{Bomb@{Bomb}}
+
+
+Inheritance diagram for Bomb\+:
+% FIG 0
+
+
+Collaboration diagram for Bomb\+:
+% FIG 1
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_bomb_a101f3d9aef8ff2f18db5a48f8c6d77a1}\label{class_bomb_a101f3d9aef8ff2f18db5a48f8c6d77a1}} 
+{\bfseries Bomb} (int \+\_\+x, int \+\_\+y, int \+\_\+t)
+\item 
+\mbox{\Hypertarget{class_bomb_a2aa330d48275787fd38b3683330ca814}\label{class_bomb_a2aa330d48275787fd38b3683330ca814}} 
+char {\bfseries symbol} () const override
+\item 
+\mbox{\Hypertarget{class_bomb_a71997bfdc18f2d2e9bc2623a87b3b615}\label{class_bomb_a71997bfdc18f2d2e9bc2623a87b3b615}} 
+Colors {\bfseries color} () const override
+\item 
+\mbox{\Hypertarget{class_bomb_a559638691a0f6a4958c550c799ab0bfa}\label{class_bomb_a559638691a0f6a4958c550c799ab0bfa}} 
+void {\bfseries detonate} (int radius, \mbox{\hyperlink{class_game}{Game}} \&g, \mbox{\hyperlink{class_player}{Player}} \&p)
+\item 
+\mbox{\Hypertarget{class_bomb_a2056df36f8b702e066d39a049df6b7bb}\label{class_bomb_a2056df36f8b702e066d39a049df6b7bb}} 
+void {\bfseries decrease\+Timer} ()
+\item 
+\mbox{\Hypertarget{class_bomb_a0711243c5a0684c18b2426c4286c2181}\label{class_bomb_a0711243c5a0684c18b2426c4286c2181}} 
+bool {\bfseries check\+Bomb\+Collision} (std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_object}{Object}} $>$$>$\+::iterator \&i, \mbox{\hyperlink{class_game}{Game}} \&g, \mbox{\hyperlink{class_player}{Player}} \&p)
+\item 
+\mbox{\Hypertarget{class_bomb_ac8d196c7c71dd96eff14766da33b3d2f}\label{class_bomb_ac8d196c7c71dd96eff14766da33b3d2f}} 
+int {\bfseries get\+Timer} () const
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Bomb.\+h\item 
+src/Bomb.\+cpp\end{DoxyCompactItemize}

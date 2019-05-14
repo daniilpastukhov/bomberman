@@ -27,6 +27,10 @@
 #include "Ghost.h"
 #include "Bot.h"
 
+/*
+ * \brief An implementation of "Bomberman".
+ */
+
 int main() {
     std::shared_ptr<Game> game = std::make_shared<Game>();
 

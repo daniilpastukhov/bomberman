@@ -1,0 +1,68 @@
+\hypertarget{class_game}{}\section{Game Class Reference}
+\label{class_game}\index{Game@{Game}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_a6f3a33940524b6ba9d83f627ccb14bbf}\label{class_game_a6f3a33940524b6ba9d83f627ccb14bbf}} 
+void {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{class_game_a1ab78f5ed0d5ea879157357cf2fb2afa}\label{class_game_a1ab78f5ed0d5ea879157357cf2fb2afa}} 
+void {\bfseries run} ()
+\item 
+\mbox{\Hypertarget{class_game_ad5133caa8447aadf71d6ba6c20d552bd}\label{class_game_ad5133caa8447aadf71d6ba6c20d552bd}} 
+void {\bfseries close} ()
+\item 
+\mbox{\Hypertarget{class_game_ada8c449d8f734c2ad2e2ed292d4b787d}\label{class_game_ada8c449d8f734c2ad2e2ed292d4b787d}} 
+void {\bfseries load\+Map} ()
+\item 
+\mbox{\Hypertarget{class_game_ad7f22fa3f9e4bc206be4ef32c545b9a4}\label{class_game_ad7f22fa3f9e4bc206be4ef32c545b9a4}} 
+void {\bfseries make\+Borders} ()
+\item 
+\mbox{\Hypertarget{class_game_a0cfc647506542f877d8495596aa3ece1}\label{class_game_a0cfc647506542f877d8495596aa3ece1}} 
+void {\bfseries draw\+Map} ()
+\item 
+\mbox{\Hypertarget{class_game_a710b1a71a2a1f295e8f5cc1b48031d98}\label{class_game_a710b1a71a2a1f295e8f5cc1b48031d98}} 
+void {\bfseries refresh\+Map} ()
+\item 
+\mbox{\Hypertarget{class_game_a385999700fd4b4e4f47c6b41fe394499}\label{class_game_a385999700fd4b4e4f47c6b41fe394499}} 
+bool {\bfseries handle\+Pressed\+Key} (int)
+\item 
+\mbox{\Hypertarget{class_game_a4f6ad0a49063725071071646f4761681}\label{class_game_a4f6ad0a49063725071071646f4761681}} 
+bool {\bfseries make\+Move} (int, int, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_player}{Player}} $>$ \&)
+\item 
+\mbox{\Hypertarget{class_game_aa4d67f4480762a39cfa7734da8221a14}\label{class_game_aa4d67f4480762a39cfa7734da8221a14}} 
+void {\bfseries spawn\+Bomb\+Bonus} ()
+\item 
+\mbox{\Hypertarget{class_game_a2cc8bc60213d0effd957efe54929e211}\label{class_game_a2cc8bc60213d0effd957efe54929e211}} 
+void {\bfseries spawn\+Range\+Bonus} ()
+\item 
+\mbox{\Hypertarget{class_game_ad7a4181414089729ddea00c053f822c4}\label{class_game_ad7a4181414089729ddea00c053f822c4}} 
+void {\bfseries spawn\+Enemy} ()
+\item 
+\mbox{\Hypertarget{class_game_a5a2ab72063d3d3f01c71b4318c840128}\label{class_game_a5a2ab72063d3d3f01c71b4318c840128}} 
+void {\bfseries move\+Enemies} ()
+\item 
+\mbox{\Hypertarget{class_game_a804b2020e35a77740013a4ceff317a56}\label{class_game_a804b2020e35a77740013a4ceff317a56}} 
+void {\bfseries make\+Enemy\+Step} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ghost}{Ghost}} $>$ \&, int, int)
+\item 
+\mbox{\Hypertarget{class_game_ac7d371f3f30513a4f3c57f521fac9b5f}\label{class_game_ac7d371f3f30513a4f3c57f521fac9b5f}} 
+void {\bfseries game\+Over} ()
+\item 
+\mbox{\Hypertarget{class_game_a3db24dd3d83502f3c31117768da3f0ab}\label{class_game_a3db24dd3d83502f3c31117768da3f0ab}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_object}{Object}} $>$ {\bfseries check\+Collision} (int, int) const
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_a7d6d3826cb7f43f8aafc9e949c93c80a}\label{class_game_a7d6d3826cb7f43f8aafc9e949c93c80a}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_object}{Object}} $>$ $>$ {\bfseries objects}
+\item 
+\mbox{\Hypertarget{class_game_a1aebd70d2399cf4368cbc1d1e31110ec}\label{class_game_a1aebd70d2399cf4368cbc1d1e31110ec}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ghost}{Ghost}} $>$ $>$ {\bfseries enemies}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Game.\+h\item 
+src/Game.\+cpp\end{DoxyCompactItemize}
