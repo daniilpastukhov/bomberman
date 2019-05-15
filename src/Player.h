@@ -12,15 +12,15 @@
 #include "Object.h"
 #include "Bomb.h"
 
-/*
- * \brief A class to represent a player.
+/**
+ * @brief A class to represent a player.
  */
 class Player : public Object {
 public:
-    /*
-     * \param[in] _x Coordinate x.
-     * \param[in] _y Coordinate y.
-     * \param[in] _c Char to represent the player.
+    /**
+     * @param[in] _x Coordinate x.
+     * @param[in] _y Coordinate y.
+     * @param[in] _c Char to represent the player.
      */
     Player(int _x, int _y, char _c);
 
@@ -28,42 +28,42 @@ public:
 
     Colors color() const override;
 
-    /*
-     * \brief Place bomb on current position.
+    /**
+     * @brief Place bomb on current position.
      * /param[in] g Instance of the game.
      */
     void placeBomb(Game &g);
 
-    /*
-     * \brief Increase the duration of bomb bonus.
+    /**
+     * @brief Increase the duration of bomb bonus.
      */
     void increaseBombBonus();
 
-    /*
-     * \brief Increase the duration of range bonus.
+    /**
+     * @brief Increase the duration of range bonus.
      */
     void increaseRangeBonus();
 
-    /*
-     * \brief Decrease all player's bombs timer.
+    /**
+     * @brief Decrease all player's bombs timer.
      * /param[in] g Instance of the game.
-     * \return True if bomb was detonated, false otherwise.
+     * @return True if bomb was detonated, false otherwise.
      */
     bool decreaseBombTimer(Game &g);
 
-    /*
-     * \brief Decrease the duration of bomb bonus.
+    /**
+     * @brief Decrease the duration of bomb bonus.
      */
     void decreaseBombsPlaced();
 
-    /*
-     * \brief Decrease the duration of range bonus.
+    /**
+     * @brief Decrease the duration of range bonus.
      */
     void decreaseBonusTimers();
 
-    /*
-     * \brief Increase player's score.
-     * \param[in] s Number to increase score with.
+    /**
+     * @brief Increase player's score.
+     * @param[in] s Number to increase score with.
      */
     void increaseScore(int s);
 

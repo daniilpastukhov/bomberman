@@ -4,3 +4,4 @@ Build and run the game:
 - Open the folder (`cd ./bomberman`)
 - Use `make` to build bomberman
 - Use `./bomberman` to run it.
+

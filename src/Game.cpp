@@ -6,12 +6,14 @@
 
 Game::Game() {
     running = true;
-    gameMode = VSPLAYER;
+    game_mode = VSPLAYER;
 }
 
 void Game::init() {
+    setlocale(LC_CTYPE, "");
     srand(time(nullptr));
     initscr();
+    raw();
     cbreak();
     noecho();
     clear();
@@ -30,6 +32,7 @@ void Game::init() {
     init_pair(COLOR_BOMB_BONUS, COLOR_RED, COLOR_BLACK);
     init_pair(COLOR_RANGE_BONUS, COLOR_BLUE, COLOR_BLACK);
     init_pair(COLOR_GHOST, COLOR_WHITE, COLOR_WHITE);
+    init_pair(COLOR_TEXT, COLOR_WHITE, COLOR_BLACK);
 
     if (!has_colors()) {
         endwin();
@@ -37,30 +40,31 @@ void Game::init() {
         exit(1);
     }
 
+    clear();
+    attron(COLOR_SCORE);
+    if (game_mode == VSPLAYER) attron(A_BOLD);
+    mvprintw(SCREEN_HEIGHT / 2 - 5, SCREEN_WIDTH / 2 - 8, "Player vs Player");
+    attroff(A_BOLD);
+    if (game_mode == VSBOT) attron(A_BOLD);
+    mvprintw(SCREEN_HEIGHT / 2 + 5, SCREEN_WIDTH / 2 - 6, "Player vs Bot");
+    attroff(A_BOLD);
+    refresh();
+
     bool chosen = false;
     while (!chosen) { // Menu.
         int key;
-        clear();
-        attron(COLOR_SCORE);
-        if (gameMode == VSPLAYER) attron(A_BOLD);
-        mvprintw(SCREEN_HEIGHT / 2 - 5, SCREEN_WIDTH / 2 - 8, "Player vs Player");
-        attroff(A_BOLD);
-        if (gameMode == VSBOT) attron(A_BOLD);
-        mvprintw(SCREEN_HEIGHT / 2 + 5, SCREEN_WIDTH / 2 - 6, "Player vs Bot");
-        attroff(A_BOLD);
-
         if ((key = getch()) > 0) {
             switch (key) {
                 case KEY_UP:
                 case 'w':
                 case 'W': {
-                    gameMode = VSPLAYER;
+                    game_mode = VSPLAYER;
                     break;
                 }
                 case KEY_DOWN:
                 case 's':
                 case 'S': {
-                    gameMode = VSBOT;
+                    game_mode = VSBOT;
                     break;
                 }
                 case '\n': // Enter key
@@ -74,8 +78,23 @@ void Game::init() {
                     exit(1);
                 }
             }
+            clear();
+            attron(COLOR_SCORE);
+            if (game_mode == VSPLAYER) attron(A_BOLD);
+            mvprintw(SCREEN_HEIGHT / 2 - 5, SCREEN_WIDTH / 2 - 8, "Player vs Player");
+            attroff(A_BOLD);
+            if (game_mode == VSBOT) attron(A_BOLD);
+            mvprintw(SCREEN_HEIGHT / 2 + 5, SCREEN_WIDTH / 2 - 6, "Player vs Bot");
+            attroff(A_BOLD);
+            refresh();
         }
-        refresh();
+    }
+
+    if (game_mode == VSPLAYER) {
+        askName(1);
+        askName(2);
+    } else {
+        askName(1);
     }
 }
 
@@ -87,7 +106,7 @@ void Game::run() {
     player1 = std::make_shared<Player>(Player(1, 1, '1'));
     objects.push_back(player1);
 
-    if (gameMode == VSPLAYER) {
+    if (game_mode == VSPLAYER) {
         player2 = std::make_shared<Player>(Player(SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2, '2'));
         objects.push_back(player2);
     } else {
@@ -111,7 +130,7 @@ void Game::run() {
         }
 
         if (ticks % (TICKS_MAX / 2) == 0) {
-            if (gameMode == VSBOT) {
+            if (game_mode == VSBOT) {
                 bot->chooseDirection(*this, player1);
                 refreshMap();
             }
@@ -134,11 +153,11 @@ void Game::run() {
             player1->decreaseBonusTimers();
         }
 
-        if (gameMode == VSPLAYER && player2->getBonusStatus()) {
+        if (game_mode == VSPLAYER && player2->getBonusStatus()) {
             player2->decreaseBonusTimers();
         }
 
-        if (gameMode == VSBOT && bot->getBonusStatus()) {
+        if (game_mode == VSBOT && bot->getBonusStatus()) {
             bot->decreaseBonusTimers();
         }
 
@@ -146,17 +165,17 @@ void Game::run() {
             refreshMap();
         }
 
-        if (gameMode == VSPLAYER && player2->decreaseBombTimer(*this)) {
+        if (game_mode == VSPLAYER && player2->decreaseBombTimer(*this)) {
             refreshMap();
         }
 
-        if (gameMode == VSBOT && bot->decreaseBombTimer(*this)) {
+        if (game_mode == VSBOT && bot->decreaseBombTimer(*this)) {
             refreshMap();
         }
 
         if (find(objects.begin(), objects.end(), player1) == objects.end()
-            || (gameMode == VSPLAYER && find(objects.begin(), objects.end(), player2) == objects.end())
-            || (gameMode == VSBOT && find(objects.begin(), objects.end(), bot) == objects.end())) {
+            || (game_mode == VSPLAYER && find(objects.begin(), objects.end(), player2) == objects.end())
+            || (game_mode == VSBOT && find(objects.begin(), objects.end(), bot) == objects.end())) {
             gameOver();
             running = false;
             break;
@@ -224,16 +243,18 @@ void Game::drawMap() {
 
 void Game::refreshMap() {
     clear();
-    for (const auto &item: objects) {
-        attron(COLOR_PAIR(item->color()));
-        mvaddch(item->getY(), item->getX(), item->symbol());
+    for (const auto &item: objects) { // Draw every object.
+        item->draw();
+//        attron(COLOR_PAIR(item->color()));
+//        mvaddch(item->getY(), item->getX(), item->symbol());
     }
     player1->draw();
-    if (gameMode == VSPLAYER) player2->draw();
+    if (game_mode == VSPLAYER) player2->draw();
     else bot->draw();
     attron(COLOR_PAIR(COLOR_SCORE));
-    mvprintw(SCREEN_HEIGHT - 1, 0, "Player1: %d, player2: %d", player1->getScore(),
-             (gameMode == VSPLAYER) ? player2->getScore() : bot->getScore());
+    mvprintw(SCREEN_HEIGHT - 1, 0, "%s: %d, %s: %d", player1_name.c_str(), player1->getScore(),
+             (game_mode == VSPLAYER) ? player2_name.c_str() : "Bot",
+             (game_mode == VSPLAYER) ? player2->getScore() : bot->getScore()); // Print score.
     refresh();
 }
 
@@ -271,7 +292,7 @@ bool Game::handlePressedKey(int key_code) {
         }
     }
 
-    if (gameMode == VSPLAYER) {
+    if (game_mode == VSPLAYER) {
         switch (key_code) {
             case KEY_LEFT: {
                 update = makeMove(-1, 0, player2);
@@ -333,8 +354,15 @@ std::shared_ptr<Object> Game::checkCollision(int x, int y) const {
 
 void Game::gameOver() {
     clear();
-    attron(COLOR_PAIR(COLOR_SCORE));
-    mvprintw(SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2 - 5, "Game over!");
+    attron(COLOR_PAIR(COLOR_TEXT));
+    mvprintw(SCREEN_HEIGHT / 2 - 4, SCREEN_WIDTH / 2 - 5, "Game over!");
+    if (find(objects.begin(), objects.end(), player1) == objects.end()) {
+        if (game_mode == VSPLAYER) mvprintw(SCREEN_HEIGHT / 2 - 3, SCREEN_WIDTH / 2 - 5,"%s won!", player2_name.c_str());
+        else mvprintw(SCREEN_HEIGHT / 2 - 3, SCREEN_WIDTH / 2 - 4,"Bot won!");
+    } else {
+        mvprintw(SCREEN_HEIGHT / 2 - 3, SCREEN_WIDTH / 2 - 6, "%s won!", player1_name.c_str());
+    }
+    handleScore();
     int key = 0;
     while (true) {
         if ((key = getch()) > 0 && (key == 'q' || key == 'Q')) {
@@ -348,12 +376,12 @@ void Game::spawnBombBonus() {
     int pos_x = rand() % 78 + 1;
     int pos_y = rand() % 22 + 1;
 
-    while (checkCollision(pos_x, pos_y) || counter++ == objects.size()) {
+    while (checkCollision(pos_x, pos_y) || counter++ == (int) objects.size()) {
         pos_x = rand() % 78 + 1;
         pos_y = rand() % 22 + 1;
     }
 
-    if (counter < objects.size())
+    if (counter < (int) objects.size())
         objects.push_back(std::make_shared<BombBonus>(pos_x, pos_y));
 }
 
@@ -362,11 +390,11 @@ void Game::spawnRangeBonus() {
     int pos_x = rand() % 78 + 1;
     int pos_y = rand() % 22 + 1;
 
-    while (checkCollision(pos_x, pos_y) || counter++ == objects.size()) {
+    while (checkCollision(pos_x, pos_y) || counter++ == (int) objects.size()) {
         pos_x = rand() % 78 + 1;
         pos_y = rand() % 22 + 1;
     }
-    if (counter < objects.size())
+    if (counter < (int) objects.size())
         objects.push_back(std::make_shared<RangeBonus>(pos_x, pos_y));
 }
 
@@ -416,13 +444,91 @@ void Game::spawnEnemy() {
     enemies.push_back(ghost);
 }
 
-// TODO
-//void Game::askName(int i) {
-//    bool written = false;
-//    while (!written) {
-//        attron(A_BOLD);
-//        mvprintw(0, 0, "Fill the name: ");
-//        attroff(A_BOLD);
-//
-//    }
-//}
+void Game::askName(int i) {
+    clear();
+    std::string name;
+    bool written = false;
+    while (!written) {
+        int key;
+        attron(A_BOLD);
+        mvprintw(SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2 - 20,
+                 (i == 1) ? "Enter first player's name: %s" : "Enter second player's name: %s", name.c_str());
+        attroff(A_BOLD);
+        if ((key = getch()) > 0) {
+            switch (key) {
+                case '\n': { // Enter key
+                    written = true;
+                    break;
+                }
+                case KEY_BACKSPACE:
+                case '\b':
+                case 127: {
+                    name.pop_back();
+                    clear();
+                    break;
+                }
+                case KEY_EXIT: {
+                    close();
+                    exit(1);
+                    break;
+                }
+                default: {
+                    name += key;
+                }
+            }
+        }
+        refresh();
+    }
+
+    if (i == 1) player1_name = name;
+    else if (i == 2) player2_name = name;
+}
+
+void Game::handleScore() {
+    std::fstream lb("src/leaderboards.txt");
+    if (!lb.is_open()) {
+        attron(COLOR_PAIR(COLOR_TEXT));
+        mvprintw(SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2 - 14, "Failed to load leaderboards.");
+    } else {
+        attron(A_BOLD);
+        mvprintw(SCREEN_HEIGHT / 2 - 1, SCREEN_WIDTH / 2 - 6, "Leaderboards");
+        attroff(A_BOLD);
+        std::multimap<std::string, int> scores;
+        std::string buffer;
+        int score = 0;
+        int padding = 0;
+        attron(COLOR_PAIR(COLOR_TEXT));
+        while (getline(lb, buffer)) { // Load previous leaders
+            std::stringstream ss(buffer);
+            std::string name;
+            ss >> name >> score;
+            name.pop_back(); // Delete ':' from the name
+            scores.insert({name, score});
+        }
+
+        lb.close();
+
+        std::ofstream lb("src/leaderboards.txt", std::ofstream::out | std::ofstream::trunc);
+
+        if (game_mode == VSPLAYER) {
+            scores.insert({player1_name, player1->getScore()});
+            scores.insert({player2_name, player2->getScore()});
+        } else {
+            scores.insert({player1_name, player1->getScore()});
+        }
+
+        std::vector<std::pair<std::string, int>> pairs; // Sorted map by score.
+        for (auto &score: scores) pairs.push_back(score);
+        sort(pairs.begin(), pairs.end(),
+             [=](std::pair<std::string, int> &a, std::pair<std::string, int> &b) { return a.second > b.second; });
+
+        int counter = 0;
+        for (const auto &i: pairs) { // Write new leaderboard.
+            if (counter++ <= 7)  break;
+            mvprintw(SCREEN_HEIGHT / 2 - padding--, SCREEN_WIDTH / 2 - 6, "%s: %d", i.first.c_str(), i.second);
+            lb << i.first << ": " << i.second << std::endl;
+        }
+
+        lb.close();
+    }
+}

@@ -27,8 +27,10 @@
 #include "Ghost.h"
 #include "Bot.h"
 
-/*
- * \brief An implementation of "Bomberman".
+/**
+ * @mainpage Bomberman
+ * @section desc_sec Description
+ * An implementation of Bomberman (https://en.wikipedia.org/wiki/Bomberman) using C++ with ncurses library.
  */
 
 int main() {

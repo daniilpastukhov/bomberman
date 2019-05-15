@@ -12,15 +12,16 @@ static const int SCREEN_HEIGHT = 24;
 static const std::string path = "src/map/map.txt";
 //static const std::string path = "src/map/empty_map.txt";
 
-static const int TICKS_MAX = 500000;
-//static const int TICKS_MAX = 1500000;
+#ifdef __APPLE__
+    static const int TICKS_MAX = 500000;
+#elif __linux__
+    static const int TICKS_MAX = 1500000;
+#endif
 
 static const int EXPLOSION_RANGE = 3;
 static const int BOMBS_MAX = 1;
 static const int BONUS_DURATION = 5000000;
 static const int GHOST_AMOUNT = 5;
-
-static char map[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 enum Colors {
     COLOR_WALL = 1,
@@ -30,7 +31,8 @@ enum Colors {
     COLOR_BOMB,
     COLOR_BOMB_BONUS,
     COLOR_RANGE_BONUS,
-    COLOR_GHOST
+    COLOR_GHOST,
+    COLOR_TEXT
 };
 
 enum Bonuses {

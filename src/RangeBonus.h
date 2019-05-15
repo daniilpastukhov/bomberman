@@ -8,14 +8,14 @@
 #include "Game.h"
 #include "Bonus.h"
 
-/*
- * \brief A class to represent a range bonus.
+/**
+ * @brief A class to represent a range bonus.
  */
 class RangeBonus : public Bonus {
 public:
-    /*
-     * \param[in] _x Coordinate x.
-     * \param[in] _y Coordinate y.
+    /**
+     * @param[in] _x Coordinate x.
+     * @param[in] _y Coordinate y.
      */
     RangeBonus(int _x, int _y);
 

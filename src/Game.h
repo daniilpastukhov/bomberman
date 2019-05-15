@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <ncurses.h>
 #include <algorithm>
+#include <map>
 #include "Object.h"
 #include "Box.h"
 #include "Wall.h"
@@ -23,96 +24,98 @@
 #include "RangeBonus.h"
 #include "Ghost.h"
 
-/*
+/**
  * Main class that represents a game itself.
  */
 class Game {
 public:
     Game();
 
-    /*
-     * \brief Initialization of the game.
+    /**
+     * @brief Initialization of the game.
      */
     void init();
 
-    /*
-     * \brief Infinite loop, all processes run here.
+    /**
+     * @brief Infinite loop, all processes run here.
      */
     void run();
 
-    /*
-     * \brief Close window, called at the end of the game.
+    /**
+     * @brief Close window, called at the end of the game.
      */
     void close();
 
-    /*
-     * \brief Load map from a file.
+    /**
+     * @brief Load map from a file.
     */
     void loadMap();
 
-    /*
-     * \brief Make borders and push them to objects.
+    /**
+     * @brief Make borders and push them to objects.
      */
     void makeBorders();
 
-    /*
-     * \brief Push objects from template to objects.
+    /**
+     * @brief Push objects from template to objects.
      */
     void drawMap();
 
-    /*
-     * \brief Refresh all objects on the map.
+    /**
+     * @brief Refresh all objects on the map.
      */
     void refreshMap();
 
-    /*
-     * \brief Handle pressed key and do corresponding action.
-     * \return true if an action was done and false if no action was done (because of collision).
+    /**
+     * @brief Handle pressed key and do corresponding action.
+     * @return true if an action was done and false if no action was done (because of collision).
      */
     bool handlePressedKey(int);
 
-    /*
-     * \brief Make move with collision checking.
-     * \return true if there is no collisions or there is collision with a bonus and false if there is a collision.
+    /**
+     * @brief Make move with collision checking.
+     * @return true if there is no collisions or there is collision with a bonus and false if there is a collision.
      */
     bool makeMove(int, int, std::shared_ptr<Player> &);
 
-    /*
-     * \brief Spawn bomb bonus at random location.
+    /**
+     * @brief Spawn bomb bonus at random location.
      */
     void spawnBombBonus();
 
-    /*
-     * \brief Spawn range bonus at random location.
+    /**
+     * @brief Spawn range bonus at random location.
      */
     void spawnRangeBonus();
 
-    /*
-     * \brief Spawn enemy at random location.
+    /**
+     * @brief Spawn enemy at random location.
      */
     void spawnEnemy();
 
-    /*
-     * \brief All enemies make a random step.
+    /**
+     * @brief All enemies make a random step.
      */
     void moveEnemies();
 
-    /*
-     * \brief Check collision and make a step.
+    /**
+     * @brief Check collision and make a step.
      */
     void makeEnemyStep(std::shared_ptr<Ghost> &, int, int);
 
-    // TODO
-//    void askName(int);
 
-    /*
-     * \brief Show game over screen and wait for a quiting.
+    void askName(int);
+
+    void handleScore();
+
+    /**
+     * @brief Show game over screen and wait for a quiting.
      */
     void gameOver();
 
-    /*
-     * \brief Check collision with any object.
-     * \return smart pointer to the object or nullptr.
+    /**
+     * @brief Check collision with any object.
+     * @return smart pointer to the object or nullptr.
      */
     std::shared_ptr<Object> checkCollision(int, int) const;
 
@@ -120,10 +123,13 @@ public:
 
     std::vector<std::shared_ptr<Ghost>> enemies; // Vector with all enemies (ghosts).
 private:
-    Mode gameMode; // Versus bot or versus player.
+    Mode game_mode; // Versus bot or versus player.
     std::shared_ptr<Player> player1;
+    std::string player1_name;
     std::shared_ptr<Player> player2;
+    std::string player2_name;
     std::shared_ptr<Bot> bot;
+    char map[SCREEN_HEIGHT][SCREEN_WIDTH];
     bool running;
 };
 

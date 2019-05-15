@@ -16,7 +16,7 @@ Player::Player(int _x, int _y, char _c) : Object(_x, _y), id(_c) {
 
 char Player::symbol() const {
     return id;
-};
+}
 
 Colors Player::color() const {
     return COLOR_PLAYER;

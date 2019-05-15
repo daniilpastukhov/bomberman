@@ -2,7 +2,8 @@ CXX = g++
 # path #
 SRC_PATH = src
 BUILD_PATH = build
-BIN_PATH = $(BUILD_PATH)/bin
+LOGIN = bin
+BIN_PATH = $(LOGIN)
 # executable #
 BIN_NAME = bomberman
 # extensions #
@@ -18,15 +19,15 @@ OBJECTS = $(SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/%.o)
 DEPS = $(OBJECTS:.o=.d)
 # flags #
 COMPILE_FLAGS = -std=c++14 -O2 -Wall -pedantic -g -c
-#INCLUDES = -I include/ -I /usr/local/include
 # Space-separated pkg-config libraries used by this project
 LIBS = -lncurses
 .PHONY: default_target
-default_target: release
-.PHONY: release
-release: export CXXFLAGS := $(CXXFLAGS) $(COMPILE_FLAGS)
-release: dirs
-	@$(MAKE) all
+default_target: all
+.PHONY: all
+all: export CXXFLAGS := $(CXXFLAGS) $(COMPILE_FLAGS)
+all: dirs
+	@$(MAKE) build
+	@$(MAKE) doc
 .PHONY: dirs
 dirs:
 	@echo "Creating directories"
@@ -39,9 +40,12 @@ clean:
 	@echo "Deleting directories"
 	@$(RM) -r $(BUILD_PATH)
 	@$(RM) -r $(BIN_PATH)
+	@$(RM) -r doc
 # checks the executable and symlinks to the output
-.PHONY: all
-all: $(BIN_PATH)/$(BIN_NAME)
+.PHONY: doc
+	doxygen Doxyfile
+.PHONY: build
+build: $(BIN_PATH)/$(BIN_NAME)
 	@echo "Making symlink: $(BIN_NAME) -> $<"
 	@$(RM) $(BIN_NAME)
 	@ln -s $(BIN_PATH)/$(BIN_NAME) $(BIN_NAME)
@@ -56,4 +60,14 @@ $(BIN_PATH)/$(BIN_NAME): $(OBJECTS)
 # dependency files to provide header dependencies
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	@echo "Compiling: $< -> $@"
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -MP -MMD -c $< -o $@
+	$(CXX) $(CXXFLAGS) -MP -MMD -c $< -o $@
+.PHONY: run
+run:
+	$(LOGIN)/$(BIN_NAME)
+.PHONY: doc
+doc:
+	doxygen Doxyfile
+.PHONY: compile
+compile: dirs
+	@$(MAKE) build
+

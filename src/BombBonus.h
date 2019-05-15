@@ -9,14 +9,14 @@
 #include "Game.h"
 #include <random>
 
-/*
- * \brief A class to represent a bomb bonus.
+/**
+ * @brief A class to represent a bomb bonus.
  */
 class BombBonus : public Bonus {
 public:
-    /*
-     * \param[in] _x Coordinate x.
-     * \param[in] _y Coordinate x.
+    /**
+     * @param[in] _x Coordinate x.
+     * @param[in] _y Coordinate x.
      */
     BombBonus(int, int);
 

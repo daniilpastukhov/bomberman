@@ -7,16 +7,16 @@
 
 #include "Object.h"
 
-/*
- * \brief An abstract class to represent bonus.
+/**
+ * @brief An abstract class to represent bonus.
  */
 
 class Bonus : public Object {
 public:
     Bonus(int, int);
 
-    /*
-     * \brief Spawn bonus at random location.
+    /**
+     * @brief Spawn bonus at random location.
      */
     virtual void spawn(Game &) = 0;
 };

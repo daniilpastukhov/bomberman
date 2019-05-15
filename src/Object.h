@@ -11,43 +11,43 @@
 #include <ncurses.h>
 #include "Types.h"
 
-/*
- * \brief An abstract class to represent the object.
+/**
+ * @brief An abstract class to represent the object.
  */
 
 class Object {
 public:
-    /*
-     * \param[in] _x Coordinate x.
-     * \param[in] _y Coordinate y.
-     * \param[in] _d Is destroyable.
-     * \param[in] _p Score gain after destruction.
+    /**
+     * @param[in] _x Coordinate x.
+     * @param[in] _y Coordinate y.
+     * @param[in] _d Is destroyable.
+     * @param[in] _p Score gain after destruction.
      */
     Object(int _x, int _y, bool _d = true, int _p = 0);
 
     virtual ~Object() = default;
 
-    /*
-     * \brief Returns object's symbol.
-     * \return Object's symbol.
+    /**
+     * @brief Returns object's symbol.
+     * @return Object's symbol.
      */
     virtual char symbol() const = 0;
 
-    /*
-     * \brief Returns object's color.
-     * \return Object's color.
+    /**
+     * @brief Returns object's color.
+     * @return Object's color.
      */
     virtual Colors color() const = 0;
 
-    /*
-     * \brief Move object.
-     * \param[in] horizontal_change X-axis shift.
-     * \param[in] vertical_change Y-axis shift.
+    /**
+     * @brief Move object.
+     * @param[in] horizontal_change X-axis shift.
+     * @param[in] vertical_change Y-axis shift.
      */
     void move(int, int);
 
-    /*
-     * \brief Draw current object.
+    /**
+     * @brief Draw current object.
      */
     void draw() const;
 
